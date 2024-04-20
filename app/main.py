@@ -23,20 +23,14 @@ SUPPORTED = {
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
-            if displayer := SUPPORTED[cmd].get(method_type):
-                return displayer(book).display()
-
-        if cmd == "print":
-            if printer := SUPPORTED[cmd].get(method_type):
-                return printer(book).print()
-
-        if cmd == "serialize":
-            if serializer := SUPPORTED[cmd].get(method_type):
-                return serializer(book).serialize()
-
-        raise ValueError(
-            f"Unknown command or method type: {cmd} - {method_type}"
-        )
+            display_strategy = SUPPORTED.get("display").get(method_type)
+            display_strategy(book).display()
+        elif cmd == "print":
+            printer_strategy = SUPPORTED.get("print").get(method_type)
+            printer_strategy(book).print()
+        elif cmd == "serialize":
+            serializer_strategy = SUPPORTED.get("serialize").get(method_type)
+            return serializer_strategy(book).serialize()
 
 
 if __name__ == "__main__":
